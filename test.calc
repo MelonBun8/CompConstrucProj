@@ -1,0 +1,23 @@
+// Basic Arithmetic
+x = 10;
+y = 20; 
+z = x + y * 2;
+print(z); // Expect 50
+
+// Constant Folding Test
+a = 1 + 2 * 3; // Should optimize to 7
+print(a);
+
+// Control Flow
+if (z > 40) {
+    print(111); // Expect 111
+} else {
+    print(0);
+}
+
+// Loop
+i = 0;
+while (i < 3) {
+    print(i);
+    i = i + 1;
+}
