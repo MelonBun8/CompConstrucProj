@@ -59,12 +59,11 @@ class CalcScriptParser ( Parser ):
                      "'<='", "'=='", "'!='", "'if'", "'else'", "'while'", 
                      "'print'" ]
 
-    symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
-                      "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
-                      "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
-                      "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
-                      "<INVALID>", "<INVALID>", "IF", "ELSE", "WHILE", "PRINT", 
-                      "ID", "INT", "FLOAT", "WS", "COMMENT", "BLOCK_COMMENT" ]
+    symbolicNames = [ "<INVALID>", "SEMI", "ASSIGN", "LPAREN", "RPAREN", 
+                      "LBRACE", "RBRACE", "POWER", "MUL", "DIV", "ADD", 
+                      "SUB", "GT", "LT", "GTE", "LTE", "EQ", "NEQ", "IF", 
+                      "ELSE", "WHILE", "PRINT", "ID", "INT", "FLOAT", "WS", 
+                      "COMMENT", "BLOCK_COMMENT" ]
 
     RULE_prog = 0
     RULE_stat = 1
@@ -79,23 +78,23 @@ class CalcScriptParser ( Parser ):
                    "whileStmt", "block", "expr" ]
 
     EOF = Token.EOF
-    T__0=1
-    T__1=2
-    T__2=3
-    T__3=4
-    T__4=5
-    T__5=6
-    T__6=7
-    T__7=8
-    T__8=9
-    T__9=10
-    T__10=11
-    T__11=12
-    T__12=13
-    T__13=14
-    T__14=15
-    T__15=16
-    T__16=17
+    SEMI=1
+    ASSIGN=2
+    LPAREN=3
+    RPAREN=4
+    LBRACE=5
+    RBRACE=6
+    POWER=7
+    MUL=8
+    DIV=9
+    ADD=10
+    SUB=11
+    GT=12
+    LT=13
+    GTE=14
+    LTE=15
+    EQ=16
+    NEQ=17
     IF=18
     ELSE=19
     WHILE=20
@@ -132,6 +131,14 @@ class CalcScriptParser ( Parser ):
 
         def getRuleIndex(self):
             return CalcScriptParser.RULE_prog
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterProg" ):
+                listener.enterProg(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitProg" ):
+                listener.exitProg(self)
 
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitProg" ):
@@ -196,6 +203,16 @@ class CalcScriptParser ( Parser ):
         def assignment(self):
             return self.getTypedRuleContext(CalcScriptParser.AssignmentContext,0)
 
+        def SEMI(self):
+            return self.getToken(CalcScriptParser.SEMI, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterAssignStat" ):
+                listener.enterAssignStat(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitAssignStat" ):
+                listener.exitAssignStat(self)
 
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitAssignStat" ):
@@ -214,6 +231,14 @@ class CalcScriptParser ( Parser ):
             return self.getTypedRuleContext(CalcScriptParser.BlockContext,0)
 
 
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterBlockStat" ):
+                listener.enterBlockStat(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitBlockStat" ):
+                listener.exitBlockStat(self)
+
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitBlockStat" ):
                 return visitor.visitBlockStat(self)
@@ -230,6 +255,16 @@ class CalcScriptParser ( Parser ):
         def printStmt(self):
             return self.getTypedRuleContext(CalcScriptParser.PrintStmtContext,0)
 
+        def SEMI(self):
+            return self.getToken(CalcScriptParser.SEMI, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterPrintStat" ):
+                listener.enterPrintStat(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitPrintStat" ):
+                listener.exitPrintStat(self)
 
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitPrintStat" ):
@@ -248,6 +283,14 @@ class CalcScriptParser ( Parser ):
             return self.getTypedRuleContext(CalcScriptParser.IfStmtContext,0)
 
 
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterIfStat" ):
+                listener.enterIfStat(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitIfStat" ):
+                listener.exitIfStat(self)
+
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitIfStat" ):
                 return visitor.visitIfStat(self)
@@ -264,6 +307,14 @@ class CalcScriptParser ( Parser ):
         def whileStmt(self):
             return self.getTypedRuleContext(CalcScriptParser.WhileStmtContext,0)
 
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterWhileStat" ):
+                listener.enterWhileStat(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitWhileStat" ):
+                listener.exitWhileStat(self)
 
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitWhileStat" ):
@@ -292,7 +343,7 @@ class CalcScriptParser ( Parser ):
                 _la = self._input.LA(1)
                 if _la==1:
                     self.state = 22
-                    self.match(CalcScriptParser.T__0)
+                    self.match(CalcScriptParser.SEMI)
 
 
                 pass
@@ -306,7 +357,7 @@ class CalcScriptParser ( Parser ):
                 _la = self._input.LA(1)
                 if _la==1:
                     self.state = 26
-                    self.match(CalcScriptParser.T__0)
+                    self.match(CalcScriptParser.SEMI)
 
 
                 pass
@@ -350,12 +401,23 @@ class CalcScriptParser ( Parser ):
         def ID(self):
             return self.getToken(CalcScriptParser.ID, 0)
 
+        def ASSIGN(self):
+            return self.getToken(CalcScriptParser.ASSIGN, 0)
+
         def expr(self):
             return self.getTypedRuleContext(CalcScriptParser.ExprContext,0)
 
 
         def getRuleIndex(self):
             return CalcScriptParser.RULE_assignment
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterAssignment" ):
+                listener.enterAssignment(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitAssignment" ):
+                listener.exitAssignment(self)
 
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitAssignment" ):
@@ -375,7 +437,7 @@ class CalcScriptParser ( Parser ):
             self.state = 34
             self.match(CalcScriptParser.ID)
             self.state = 35
-            self.match(CalcScriptParser.T__1)
+            self.match(CalcScriptParser.ASSIGN)
             self.state = 36
             self.expr(0)
         except RecognitionException as re:
@@ -397,12 +459,26 @@ class CalcScriptParser ( Parser ):
         def PRINT(self):
             return self.getToken(CalcScriptParser.PRINT, 0)
 
+        def LPAREN(self):
+            return self.getToken(CalcScriptParser.LPAREN, 0)
+
         def expr(self):
             return self.getTypedRuleContext(CalcScriptParser.ExprContext,0)
 
 
+        def RPAREN(self):
+            return self.getToken(CalcScriptParser.RPAREN, 0)
+
         def getRuleIndex(self):
             return CalcScriptParser.RULE_printStmt
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterPrintStmt" ):
+                listener.enterPrintStmt(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitPrintStmt" ):
+                listener.exitPrintStmt(self)
 
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitPrintStmt" ):
@@ -422,11 +498,11 @@ class CalcScriptParser ( Parser ):
             self.state = 38
             self.match(CalcScriptParser.PRINT)
             self.state = 39
-            self.match(CalcScriptParser.T__2)
+            self.match(CalcScriptParser.LPAREN)
             self.state = 40
             self.expr(0)
             self.state = 41
-            self.match(CalcScriptParser.T__3)
+            self.match(CalcScriptParser.RPAREN)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -446,9 +522,15 @@ class CalcScriptParser ( Parser ):
         def IF(self):
             return self.getToken(CalcScriptParser.IF, 0)
 
+        def LPAREN(self):
+            return self.getToken(CalcScriptParser.LPAREN, 0)
+
         def expr(self):
             return self.getTypedRuleContext(CalcScriptParser.ExprContext,0)
 
+
+        def RPAREN(self):
+            return self.getToken(CalcScriptParser.RPAREN, 0)
 
         def stat(self, i:int=None):
             if i is None:
@@ -462,6 +544,14 @@ class CalcScriptParser ( Parser ):
 
         def getRuleIndex(self):
             return CalcScriptParser.RULE_ifStmt
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterIfStmt" ):
+                listener.enterIfStmt(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitIfStmt" ):
+                listener.exitIfStmt(self)
 
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitIfStmt" ):
@@ -481,11 +571,11 @@ class CalcScriptParser ( Parser ):
             self.state = 43
             self.match(CalcScriptParser.IF)
             self.state = 44
-            self.match(CalcScriptParser.T__2)
+            self.match(CalcScriptParser.LPAREN)
             self.state = 45
             self.expr(0)
             self.state = 46
-            self.match(CalcScriptParser.T__3)
+            self.match(CalcScriptParser.RPAREN)
             self.state = 47
             self.stat()
             self.state = 50
@@ -517,9 +607,15 @@ class CalcScriptParser ( Parser ):
         def WHILE(self):
             return self.getToken(CalcScriptParser.WHILE, 0)
 
+        def LPAREN(self):
+            return self.getToken(CalcScriptParser.LPAREN, 0)
+
         def expr(self):
             return self.getTypedRuleContext(CalcScriptParser.ExprContext,0)
 
+
+        def RPAREN(self):
+            return self.getToken(CalcScriptParser.RPAREN, 0)
 
         def stat(self):
             return self.getTypedRuleContext(CalcScriptParser.StatContext,0)
@@ -527,6 +623,14 @@ class CalcScriptParser ( Parser ):
 
         def getRuleIndex(self):
             return CalcScriptParser.RULE_whileStmt
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterWhileStmt" ):
+                listener.enterWhileStmt(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitWhileStmt" ):
+                listener.exitWhileStmt(self)
 
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitWhileStmt" ):
@@ -546,11 +650,11 @@ class CalcScriptParser ( Parser ):
             self.state = 52
             self.match(CalcScriptParser.WHILE)
             self.state = 53
-            self.match(CalcScriptParser.T__2)
+            self.match(CalcScriptParser.LPAREN)
             self.state = 54
             self.expr(0)
             self.state = 55
-            self.match(CalcScriptParser.T__3)
+            self.match(CalcScriptParser.RPAREN)
             self.state = 56
             self.stat()
         except RecognitionException as re:
@@ -569,6 +673,12 @@ class CalcScriptParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
+        def LBRACE(self):
+            return self.getToken(CalcScriptParser.LBRACE, 0)
+
+        def RBRACE(self):
+            return self.getToken(CalcScriptParser.RBRACE, 0)
+
         def stat(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(CalcScriptParser.StatContext)
@@ -578,6 +688,14 @@ class CalcScriptParser ( Parser ):
 
         def getRuleIndex(self):
             return CalcScriptParser.RULE_block
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterBlock" ):
+                listener.enterBlock(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitBlock" ):
+                listener.exitBlock(self)
 
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitBlock" ):
@@ -596,7 +714,7 @@ class CalcScriptParser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 58
-            self.match(CalcScriptParser.T__4)
+            self.match(CalcScriptParser.LBRACE)
             self.state = 62
             self._errHandler.sync(self)
             _la = self._input.LA(1)
@@ -608,7 +726,7 @@ class CalcScriptParser ( Parser ):
                 _la = self._input.LA(1)
 
             self.state = 65
-            self.match(CalcScriptParser.T__5)
+            self.match(CalcScriptParser.RBRACE)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -646,6 +764,16 @@ class CalcScriptParser ( Parser ):
             else:
                 return self.getTypedRuleContext(CalcScriptParser.ExprContext,i)
 
+        def POWER(self):
+            return self.getToken(CalcScriptParser.POWER, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterPowerExpr" ):
+                listener.enterPowerExpr(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitPowerExpr" ):
+                listener.exitPowerExpr(self)
 
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitPowerExpr" ):
@@ -662,6 +790,14 @@ class CalcScriptParser ( Parser ):
 
         def FLOAT(self):
             return self.getToken(CalcScriptParser.FLOAT, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFloatExpr" ):
+                listener.enterFloatExpr(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFloatExpr" ):
+                listener.exitFloatExpr(self)
 
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitFloatExpr" ):
@@ -682,6 +818,18 @@ class CalcScriptParser ( Parser ):
             else:
                 return self.getTypedRuleContext(CalcScriptParser.ExprContext,i)
 
+        def MUL(self):
+            return self.getToken(CalcScriptParser.MUL, 0)
+        def DIV(self):
+            return self.getToken(CalcScriptParser.DIV, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterMulDivExpr" ):
+                listener.enterMulDivExpr(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitMulDivExpr" ):
+                listener.exitMulDivExpr(self)
 
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitMulDivExpr" ):
@@ -702,6 +850,18 @@ class CalcScriptParser ( Parser ):
             else:
                 return self.getTypedRuleContext(CalcScriptParser.ExprContext,i)
 
+        def EQ(self):
+            return self.getToken(CalcScriptParser.EQ, 0)
+        def NEQ(self):
+            return self.getToken(CalcScriptParser.NEQ, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterEqualityExpr" ):
+                listener.enterEqualityExpr(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitEqualityExpr" ):
+                listener.exitEqualityExpr(self)
 
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitEqualityExpr" ):
@@ -719,6 +879,14 @@ class CalcScriptParser ( Parser ):
         def ID(self):
             return self.getToken(CalcScriptParser.ID, 0)
 
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterIdExpr" ):
+                listener.enterIdExpr(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitIdExpr" ):
+                listener.exitIdExpr(self)
+
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitIdExpr" ):
                 return visitor.visitIdExpr(self)
@@ -734,6 +902,14 @@ class CalcScriptParser ( Parser ):
 
         def INT(self):
             return self.getToken(CalcScriptParser.INT, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterIntExpr" ):
+                listener.enterIntExpr(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitIntExpr" ):
+                listener.exitIntExpr(self)
 
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitIntExpr" ):
@@ -754,6 +930,22 @@ class CalcScriptParser ( Parser ):
             else:
                 return self.getTypedRuleContext(CalcScriptParser.ExprContext,i)
 
+        def GT(self):
+            return self.getToken(CalcScriptParser.GT, 0)
+        def LT(self):
+            return self.getToken(CalcScriptParser.LT, 0)
+        def GTE(self):
+            return self.getToken(CalcScriptParser.GTE, 0)
+        def LTE(self):
+            return self.getToken(CalcScriptParser.LTE, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterRelationalExpr" ):
+                listener.enterRelationalExpr(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitRelationalExpr" ):
+                listener.exitRelationalExpr(self)
 
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitRelationalExpr" ):
@@ -768,9 +960,21 @@ class CalcScriptParser ( Parser ):
             super().__init__(parser)
             self.copyFrom(ctx)
 
+        def LPAREN(self):
+            return self.getToken(CalcScriptParser.LPAREN, 0)
         def expr(self):
             return self.getTypedRuleContext(CalcScriptParser.ExprContext,0)
 
+        def RPAREN(self):
+            return self.getToken(CalcScriptParser.RPAREN, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterParenExpr" ):
+                listener.enterParenExpr(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitParenExpr" ):
+                listener.exitParenExpr(self)
 
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitParenExpr" ):
@@ -791,6 +995,18 @@ class CalcScriptParser ( Parser ):
             else:
                 return self.getTypedRuleContext(CalcScriptParser.ExprContext,i)
 
+        def ADD(self):
+            return self.getToken(CalcScriptParser.ADD, 0)
+        def SUB(self):
+            return self.getToken(CalcScriptParser.SUB, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterAddSubExpr" ):
+                listener.enterAddSubExpr(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitAddSubExpr" ):
+                listener.exitAddSubExpr(self)
 
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitAddSubExpr" ):
@@ -840,11 +1056,11 @@ class CalcScriptParser ( Parser ):
                 self._ctx = localctx
                 _prevctx = localctx
                 self.state = 71
-                self.match(CalcScriptParser.T__2)
+                self.match(CalcScriptParser.LPAREN)
                 self.state = 72
                 self.expr(0)
                 self.state = 73
-                self.match(CalcScriptParser.T__3)
+                self.match(CalcScriptParser.RPAREN)
                 pass
             else:
                 raise NoViableAltException(self)
@@ -868,9 +1084,8 @@ class CalcScriptParser ( Parser ):
                         if not self.precpred(self._ctx, 9):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 9)")
-
                         self.state = 78
-                        self.match(CalcScriptParser.T__6)
+                        self.match(CalcScriptParser.POWER)
                         self.state = 79
                         self.expr(10)
                         pass

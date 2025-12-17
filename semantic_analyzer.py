@@ -1,3 +1,4 @@
+# Phase 3: Semantic Analysis - Symbol Table Construction and Type Checking
 from CalcScriptVisitor import CalcScriptVisitor
 from symbol_table import SymbolTable
 
@@ -58,4 +59,43 @@ class SemanticAnalyzer(CalcScriptVisitor):
             return "float"
         return "int"
     
-    # ... handle other expressions similarly
+    def visitPowerExpr(self, ctx):
+        left_type = self.visit(ctx.expr(0))
+        right_type = self.visit(ctx.expr(1))
+        # Power usually returns float or int depending on implementation, 
+        # but for type checking we ensure operands are numbers
+        if left_type not in ["int", "float"] or right_type not in ["int", "float"]:
+             self.errors.append("Error: Power operator requires numeric operands.")
+        return "float" # Result is typically float
+
+    def visitRelationalExpr(self, ctx):
+        left_type = self.visit(ctx.expr(0))
+        right_type = self.visit(ctx.expr(1))
+        if left_type not in ["int", "float"] or right_type not in ["int", "float"]:
+            self.errors.append("Error: Relational operators apply to numbers.")
+        return "int" # Representing boolean 0/1
+
+    def visitEqualityExpr(self, ctx):
+        self.visit(ctx.expr(0))
+        self.visit(ctx.expr(1))
+        return "int" # Boolean
+
+    def visitParenExpr(self, ctx):
+        return self.visit(ctx.expr())
+
+    def visitIfStat(self, ctx):
+        # ctx is IfStatContext, containing ifStmt
+        stmt = ctx.ifStmt()
+        self.visit(stmt.expr()) # Check condition
+        self.visit(stmt.stat(0)) # Then block
+        if stmt.stat(1):
+            self.visit(stmt.stat(1)) # Else block
+
+    def visitWhileStat(self, ctx):
+        stmt = ctx.whileStmt()
+        self.visit(stmt.expr())
+        self.visit(stmt.stat())
+
+    def visitPrintStat(self, ctx):
+        stmt = ctx.printStmt()
+        self.visit(stmt.expr())

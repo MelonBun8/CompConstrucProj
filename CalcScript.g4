@@ -6,37 +6,57 @@ grammar CalcScript;
 
 prog: stat+ ;
 
-stat: assignment ';'?      # AssignStat
-    | printStmt ';'?       # PrintStat
-    | ifStmt               # IfStat
-    | whileStmt            # WhileStat
-    | block                # BlockStat
+stat: assignment SEMI?      # AssignStat
+    | printStmt SEMI?       # PrintStat
+    | ifStmt                # IfStat
+    | whileStmt             # WhileStat
+    | block                 # BlockStat
     ;
 
-assignment: ID '=' expr ;
+assignment: ID ASSIGN expr ;
 
-printStmt: 'print' '(' expr ')' ;
+printStmt: PRINT LPAREN expr RPAREN ;
 
-ifStmt: 'if' '(' expr ')' stat ('else' stat)? ;
+ifStmt: IF LPAREN expr RPAREN stat (ELSE stat)? ;
 
-whileStmt: 'while' '(' expr ')' stat ;
+whileStmt: WHILE LPAREN expr RPAREN stat ;
 
-block: '{' stat* '}' ;
+block: LBRACE stat* RBRACE ;
 
-expr: expr ('^') expr                 # PowerExpr
-    | expr ('*'|'/') expr             # MulDivExpr
-    | expr ('+'|'-') expr             # AddSubExpr
-    | expr ('>'|'<'|'>='|'<=') expr   # RelationalExpr
-    | expr ('=='|'!=') expr           # EqualityExpr
-    | ID                              # IdExpr
-    | INT                             # IntExpr
-    | FLOAT                           # FloatExpr
-    | '(' expr ')'                    # ParenExpr
+expr: expr POWER expr                   # PowerExpr
+    | expr (MUL|DIV) expr               # MulDivExpr
+    | expr (ADD|SUB) expr               # AddSubExpr
+    | expr (GT|LT|GTE|LTE) expr         # RelationalExpr
+    | expr (EQ|NEQ) expr                # EqualityExpr
+    | ID                                # IdExpr
+    | INT                               # IntExpr
+    | FLOAT                             # FloatExpr
+    | LPAREN expr RPAREN                # ParenExpr
     ;
 
 /*
  * Lexer Rules
  */
+
+SEMI: ';' ;
+ASSIGN: '=' ;
+LPAREN: '(' ;
+RPAREN: ')' ;
+LBRACE: '{' ;
+RBRACE: '}' ;
+
+POWER: '^' ;
+MUL: '*' ;
+DIV: '/' ;
+ADD: '+' ;
+SUB: '-' ;
+
+GT: '>' ;
+LT: '<' ;
+GTE: '>=' ;
+LTE: '<=' ;
+EQ: '==' ;
+NEQ: '!=' ;
 
 IF: 'if' ;
 ELSE: 'else' ;

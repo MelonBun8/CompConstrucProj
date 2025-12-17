@@ -1,3 +1,4 @@
+# Phase 4: Intermediate Code Generation - Three-Address Code
 from CalcScriptVisitor import CalcScriptVisitor
 
 class Quadruple:
@@ -102,3 +103,21 @@ class IRGenerator(CalcScriptVisitor):
         op = ctx.getChild(1).getText()
         self.emit(op, left, right, temp)
         return temp
+    
+    def visitEqualityExpr(self, ctx):
+        left = self.visit(ctx.expr(0))
+        right = self.visit(ctx.expr(1))
+        temp = self.new_temp()
+        op = ctx.getChild(1).getText()
+        self.emit(op, left, right, temp)
+        return temp
+
+    def visitPowerExpr(self, ctx):
+        left = self.visit(ctx.expr(0))
+        right = self.visit(ctx.expr(1))
+        temp = self.new_temp()
+        self.emit('^', left, right, temp)
+        return temp
+
+    def visitParenExpr(self, ctx):
+        return self.visit(ctx.expr())

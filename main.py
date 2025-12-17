@@ -1,3 +1,4 @@
+# Compiler Project - Main Driver
 import sys
 from antlr4 import *
 from CalcScriptLexer import CalcScriptLexer
@@ -26,6 +27,7 @@ def main():
         return
 
     print("--- Phase 1 & 2: Parse Tree generated ---")
+    print(tree.toStringTree(recog=parser))
     
     # 2. Semantic Analysis
     print("\n--- Phase 3: Semantic Analysis ---")

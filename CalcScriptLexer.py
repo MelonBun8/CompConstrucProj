@@ -77,23 +77,23 @@ class CalcScriptLexer(Lexer):
 
     decisionsToDFA = [ DFA(ds, i) for i, ds in enumerate(atn.decisionToState) ]
 
-    T__0 = 1
-    T__1 = 2
-    T__2 = 3
-    T__3 = 4
-    T__4 = 5
-    T__5 = 6
-    T__6 = 7
-    T__7 = 8
-    T__8 = 9
-    T__9 = 10
-    T__10 = 11
-    T__11 = 12
-    T__12 = 13
-    T__13 = 14
-    T__14 = 15
-    T__15 = 16
-    T__16 = 17
+    SEMI = 1
+    ASSIGN = 2
+    LPAREN = 3
+    RPAREN = 4
+    LBRACE = 5
+    RBRACE = 6
+    POWER = 7
+    MUL = 8
+    DIV = 9
+    ADD = 10
+    SUB = 11
+    GT = 12
+    LT = 13
+    GTE = 14
+    LTE = 15
+    EQ = 16
+    NEQ = 17
     IF = 18
     ELSE = 19
     WHILE = 20
@@ -115,13 +115,15 @@ class CalcScriptLexer(Lexer):
             "'if'", "'else'", "'while'", "'print'" ]
 
     symbolicNames = [ "<INVALID>",
-            "IF", "ELSE", "WHILE", "PRINT", "ID", "INT", "FLOAT", "WS", 
-            "COMMENT", "BLOCK_COMMENT" ]
+            "SEMI", "ASSIGN", "LPAREN", "RPAREN", "LBRACE", "RBRACE", "POWER", 
+            "MUL", "DIV", "ADD", "SUB", "GT", "LT", "GTE", "LTE", "EQ", 
+            "NEQ", "IF", "ELSE", "WHILE", "PRINT", "ID", "INT", "FLOAT", 
+            "WS", "COMMENT", "BLOCK_COMMENT" ]
 
-    ruleNames = [ "T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "T__6", 
-                  "T__7", "T__8", "T__9", "T__10", "T__11", "T__12", "T__13", 
-                  "T__14", "T__15", "T__16", "IF", "ELSE", "WHILE", "PRINT", 
-                  "ID", "INT", "FLOAT", "WS", "COMMENT", "BLOCK_COMMENT" ]
+    ruleNames = [ "SEMI", "ASSIGN", "LPAREN", "RPAREN", "LBRACE", "RBRACE", 
+                  "POWER", "MUL", "DIV", "ADD", "SUB", "GT", "LT", "GTE", 
+                  "LTE", "EQ", "NEQ", "IF", "ELSE", "WHILE", "PRINT", "ID", 
+                  "INT", "FLOAT", "WS", "COMMENT", "BLOCK_COMMENT" ]
 
     grammarFileName = "CalcScript.g4"
 

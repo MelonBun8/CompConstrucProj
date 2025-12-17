@@ -1,3 +1,4 @@
+# Phase 5: Optimization (Basic) - Constant Folding
 from ir_generator import Quadruple
 
 class Optimizer:

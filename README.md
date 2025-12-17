@@ -1,2 +1,2 @@
 # CompConstrucProj
-Compile Construction Course project
+Compiler Construction Course project

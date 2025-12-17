@@ -1,23 +1,77 @@
-// Basic Arithmetic
-x = 10;
-y = 20; 
-z = x + y * 2;
-print(z); // Expect 50
+/* 
+   Comprehensive Test Suite for CalcScript 
+   Covers: Arithmetic, Logic, Control Flow, and Scoping
+*/
 
-// Constant Folding Test
-a = 1 + 2 * 3; // Should optimize to 7
-print(a);
+// --- 1. Basic Arithmetic & Precedence ---
+print(111111); // Section Marker
+a = 10;
+b = 20;
+c = (a + b) * 2;     // (10+20)*2 = 60
+d = c / 5 - 2;       // 60/5 - 2 = 10
+e = 2 ^ 3 + 1;       // 8 + 1 = 9
+print(c);
+print(d);
+print(e);
 
-// Control Flow
-if (z > 40) {
-    print(111); // Expect 111
+// --- 2. Floating Point Math ---
+print(222222);
+f = 3.14;
+g = 2.0;
+area = f * g ^ 2;    // 3.14 * 4 = 12.56
+print(area);
+
+// --- 3. Relational & Equality Logic ---
+// 1 means True, 0 means False
+print(333333);
+is_greater = 10 > 5;
+is_equal = (5 + 5) == 10;
+not_equal = 10 != 20;
+print(is_greater); // 1
+print(is_equal);   // 1
+print(not_equal);  // 1
+
+// --- 4. Control Flow: If / Else ---
+print(444444);
+score = 85;
+if (score >= 90) {
+    print(1); // Grade A (False)
 } else {
-    print(0);
+    if (score >= 80) {
+        print(2); // Grade B (True)
+    } else {
+        print(3); // Grade C (False)
+    }
 }
 
-// Loop
-i = 0;
-while (i < 3) {
-    print(i);
-    i = i + 1;
+// --- 5. Control Flow: While Loop ---
+print(555555);
+counter = 5;
+factorial = 1;
+while (counter > 0) {
+    factorial = factorial * counter;
+    counter = counter - 1;
 }
+print(factorial); // 5! = 120
+
+// --- 6. Scoping & Shadowing ---
+print(666666);
+global = 100;
+{
+    // New scope
+    global = 200; // Variable Shadowing or Re-assignment? 
+                  // In this language, it looks up scope stack, so it modifies 'global'.
+                  // Let's declare a NEW variable to test scope isolation if possible, 
+                  // but semantic analyzer 'resolve' logic implies looking up.
+    
+    local = 77;
+    print(local);
+}
+// print(local); // This would cause an error if uncommented (Variable not declared)
+print(global);   // Should be 200 if modified, or 100 if purely strictly local defs. 
+                 // (Based on code: 'define' writes to current scope. 'resolve' looks up.
+                 // So 'global = 200' inside block defines a NEW variable 'global' in that scope if it uses 'define' blindy,
+                 // or assigns if it checks existence. 
+                 // Let's check semantic_analyzer.py: visitAssignment calls define(). 
+                 // SymbolTable.define() puts it in _current_ scope. 
+                 // So "global = 200" shadows the outer "global". Outer should remain 100.)

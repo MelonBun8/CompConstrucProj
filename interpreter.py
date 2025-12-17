@@ -1,3 +1,4 @@
+# Phase 6: Code Generation - Executable Output / Interpreter
 class Interpreter:
     def execute(self, ir_code):
         pc = 0
