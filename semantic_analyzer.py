@@ -21,11 +21,11 @@ class SemanticAnalyzer(CalcScriptVisitor):
 
     def visitAssignment(self, ctx):
         var_name = ctx.ID().getText()
-        # Visit expression to get type (for now assuming simple inference or default)
+        # Visit expression FIRST to resolve variables (like right-hand side of x = x + 1)
+        # using the *current* (prior) state of the symbol table.
         expr_type = self.visit(ctx.expr())
         
-        # If variable not defined in current scope, define it
-        # For simplicity in this mini-language, assignment defines the variable
+        # Then define the variable in the current scope
         self.symbol_table.define(var_name, expr_type)
 
     def visitIdExpr(self, ctx):
@@ -92,9 +92,15 @@ class SemanticAnalyzer(CalcScriptVisitor):
             self.visit(stmt.stat(1)) # Else block
 
     def visitWhileStat(self, ctx):
+        # Special While Scope: Condition and Body share the same scope, 
+        # but it acts as a "Local" scope so we can shadow global counter.
+        self.symbol_table.enter_scope()
+        
         stmt = ctx.whileStmt()
-        self.visit(stmt.expr())
-        self.visit(stmt.stat())
+        self.visit(stmt.expr()) # Condition check inside the scope
+        self.visit(stmt.stat()) # Body check inside the scope
+        
+        self.symbol_table.exit_scope()
 
     def visitPrintStat(self, ctx):
         stmt = ctx.printStmt()

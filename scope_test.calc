@@ -1,0 +1,24 @@
+// 1. Global Scope
+g_a = 10; g_c = g_a + 4;
+g_b = 3.5; g_c = g_c + 1; print(g_c);
+if (g_a > 5) { // 2. If Block Scope
+    if_var = 1;
+    g_a = 20;  // Creates local g_a (shadows global g_a) 
+    // 3. Nested Block Scope
+    {
+        block_var = 99;
+        if_var = 2; // Creates local if_var (shadows Scope 1 if_var)
+    } 
+// Scope 2 END
+} 
+// Scope 1 END
+// Loop Scope
+counter = 10;
+while (counter > 0) {
+    loop_var = 50; print(loop_var);
+    counter = 0;
+    g_a = 77; // Shadows Global g_a
+}
+// Loop Scope END
+print(counter); // Should be 10 (global)
+//print(loop_var);
