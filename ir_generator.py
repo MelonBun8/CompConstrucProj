@@ -57,23 +57,79 @@ class IRGenerator(CalcScriptVisitor):
     def visitProg(self, ctx):
         self.visitChildren(ctx)
         return self.code
-    
+
+    def visitFuncDecl(self, ctx):
+        func_name = ctx.ID().getText()
+        self.emit('FUNC', func_name, None, None)
+        
+        self.symbol_table.define(func_name, "void", "func") # Define in outer
+        
+        self.symbol_table.enter_scope()
+        
+        # Params
+        if ctx.paramList():
+            for param in ctx.paramList().param():
+                p_name = param.ID().getText()
+                self.symbol_table.define(p_name, "param")
+                # Emit PARAM instruction? 
+                # Usually standard TAC explicitly lists params or assumes stack.
+                # We'll emit PARAM p_name
+                self.emit('PARAM', p_name, None, None)
+
+        self.visit(ctx.block())
+        
+        self.emit('END_FUNC', func_name, None, None)
+        self.symbol_table.exit_scope()
+
+    def visitReturnStat(self, ctx):
+        result = None
+        stmt = ctx.returnStmt()
+        if stmt.expr():
+            result = self.visit(stmt.expr())
+        self.emit('RETURN', result, None, None)
+
     def visitBlockStat(self, ctx):
         self.symbol_table.enter_scope()
         self.visitChildren(ctx)
         self.symbol_table.exit_scope()
 
+    def visitVarDecl(self, ctx):
+        # type ID = expr
+        original_name = ctx.ID().getText()
+        expr_result = self.visit(ctx.expr())
+        
+        mangled_name = self.symbol_table.define(original_name, "unknown")
+        self.emit('=', expr_result, None, mangled_name)
+
     def visitAssignment(self, ctx):
         original_name = ctx.ID().getText()
         
-        # 1. Visit Expression FIRST to resolve variables using current symbols
+        # 1. Visit Expression FIRST 
         expr_result = self.visit(ctx.expr())
 
-        # 2. Define/Redefine variable in current scope
-        # This returns the new mangled name for the *result* of this assignment
-        mangled_name = self.symbol_table.define(original_name, "unknown")
+        # 2. Resolve variable
+        symbol = self.symbol_table.resolve(original_name)
+        if symbol:
+            self.emit('=', expr_result, None, symbol.mangled_name)
+        else:
+            # Should have been caught by semantic analyzer
+            pass
+
+    def visitFunCallExpr(self, ctx):
+        func_name = ctx.ID().getText()
         
-        self.emit('=', expr_result, None, mangled_name)
+        args = []
+        if ctx.argList():
+            for expr in ctx.argList().expr():
+                args.append(self.visit(expr))
+        
+        # Push / Arg instructions
+        for arg in args:
+            self.emit('ARG', arg, None, None)
+            
+        temp = self.new_temp()
+        self.emit('CALL', func_name, len(args), temp)
+        return temp
 
     def visitPrintStat(self, ctx):
         result = self.visit(ctx.printStmt().expr())
@@ -91,9 +147,10 @@ class IRGenerator(CalcScriptVisitor):
         if symbol:
             return symbol.mangled_name
         else:
-            # Fallback or error, though Semantic Analyzer should have caught this.
-            # We'll validly return the original name just in case, or raise error.
             return original_name
+    
+    def visitParenExpr(self, ctx):
+        return self.visit(ctx.expr())
 
     def visitAddSubExpr(self, ctx):
         left = self.visit(ctx.expr(0))

@@ -16,13 +16,19 @@ class Interpreter:
             
             # Helper to get value
             def val(x):
-                # If x is a string number, return float
+                # If x is a string number, return float or int
                 try:
-                    return float(x)
+                    f = float(x)
+                    if f.is_integer():
+                        return int(f)
+                    return f
                 except ValueError:
-                    return memory.get(x, 0.0)
+                    v = memory.get(x, 0)
+                    if isinstance(v, float) and v.is_integer():
+                        return int(v)
+                    return v
                 except TypeError:
-                    return memory.get(x, 0.0)
+                    return 0
 
             if op == '=':
                 memory[res] = val(arg1)

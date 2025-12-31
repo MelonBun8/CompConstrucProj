@@ -14,6 +14,26 @@ class CalcScriptVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by CalcScriptParser#funcDecl.
+    def visitFuncDecl(self, ctx:CalcScriptParser.FuncDeclContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by CalcScriptParser#paramList.
+    def visitParamList(self, ctx:CalcScriptParser.ParamListContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by CalcScriptParser#param.
+    def visitParam(self, ctx:CalcScriptParser.ParamContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by CalcScriptParser#VarDeclStat.
+    def visitVarDeclStat(self, ctx:CalcScriptParser.VarDeclStatContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by CalcScriptParser#AssignStat.
     def visitAssignStat(self, ctx:CalcScriptParser.AssignStatContext):
         return self.visitChildren(ctx)
@@ -34,13 +54,33 @@ class CalcScriptVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by CalcScriptParser#ReturnStat.
+    def visitReturnStat(self, ctx:CalcScriptParser.ReturnStatContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by CalcScriptParser#ExprStat.
+    def visitExprStat(self, ctx:CalcScriptParser.ExprStatContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by CalcScriptParser#BlockStat.
     def visitBlockStat(self, ctx:CalcScriptParser.BlockStatContext):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by CalcScriptParser#varDecl.
+    def visitVarDecl(self, ctx:CalcScriptParser.VarDeclContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by CalcScriptParser#assignment.
     def visitAssignment(self, ctx:CalcScriptParser.AssignmentContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by CalcScriptParser#returnStmt.
+    def visitReturnStmt(self, ctx:CalcScriptParser.ReturnStmtContext):
         return self.visitChildren(ctx)
 
 
@@ -89,6 +129,11 @@ class CalcScriptVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by CalcScriptParser#FunCallExpr.
+    def visitFunCallExpr(self, ctx:CalcScriptParser.FunCallExprContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by CalcScriptParser#IntExpr.
     def visitIntExpr(self, ctx:CalcScriptParser.IntExprContext):
         return self.visitChildren(ctx)
@@ -106,6 +151,16 @@ class CalcScriptVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by CalcScriptParser#AddSubExpr.
     def visitAddSubExpr(self, ctx:CalcScriptParser.AddSubExprContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by CalcScriptParser#argList.
+    def visitArgList(self, ctx:CalcScriptParser.ArgListContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by CalcScriptParser#type.
+    def visitType(self, ctx:CalcScriptParser.TypeContext):
         return self.visitChildren(ctx)
 
 

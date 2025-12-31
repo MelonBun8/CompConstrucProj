@@ -16,9 +16,19 @@ def main():
     input_file = sys.argv[1]
     input_stream = FileStream(input_file)
     
-    # 1. Lexical & Syntax Analysis
+    # 1. Lexical Analysis
     lexer = CalcScriptLexer(input_stream)
     stream = CommonTokenStream(lexer)
+    stream.fill() # Load all tokens
+
+    print("--- Phase 1: Lexical Analysis (Tokens) ---")
+    # Chart 2: Lexeme Stream
+    for token in stream.tokens:
+        if token.type == Token.EOF: break
+        # Get symbolic name
+        type_name = lexer.symbolicNames[token.type]
+        print(f"Token: {type_name:<15} Lexeme: '{token.text}'")
+
     parser = CalcScriptParser(stream)
     tree = parser.prog()
 

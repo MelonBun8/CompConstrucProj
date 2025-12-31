@@ -1,77 +1,51 @@
-/* 
-   Comprehensive Test Suite for CalcScript 
-   Covers: Arithmetic, Logic, Control Flow, and Scoping
-*/
+// Comprehensive Test Script for Compiler Project (Charts 1-15)
 
-// --- 1. Basic Arithmetic & Precedence ---
-print(111111); // Section Marker
-a = 10;
-b = 20;
-c = (a + b) * 2;     // (10+20)*2 = 60
-d = c / 5 - 2;       // 60/5 - 2 = 10
-e = 2 ^ 3 + 1;       // 8 + 1 = 9
-print(c);
-print(d);
-print(e);
+// Global Variables (Chart 10: Global Scope)
+int global_x = 10;
+float global_pi = 3.14159;
 
-// --- 2. Floating Point Math ---
-print(222222);
-f = 3.14;
-g = 2.0;
-area = f * g ^ 2;    // 3.14 * 4 = 12.56
-print(area);
+// Function Definition (Chart 10: Function Scope, Chart 4: Grammar)
+func add_numbers(a: int, b: int): int {
+    // Local Variable (Chart 10: Block/Function Scope)
+    int sum = a + b;
+    return sum;
+}
 
-// --- 3. Relational & Equality Logic ---
-// 1 means True, 0 means False
-print(333333);
-is_greater = 10 > 5;
-is_equal = (5 + 5) == 10;
-not_equal = 10 != 20;
-print(is_greater); // 1
-print(is_equal);   // 1
-print(not_equal);  // 1
-
-// --- 4. Control Flow: If / Else ---
-print(444444);
-score = 85;
-if (score >= 90) {
-    print(1); // Grade A (False)
-} else {
-    if (score >= 80) {
-        print(2); // Grade B (True)
+func check_parity(n: int): void {
+    // Control Flow (Chart 4: IfStmt)
+    if (n > 0) {
+        print(1); // Positive
     } else {
-        print(3); // Grade C (False)
+        print(0); // Non-positive
     }
 }
 
-// --- 5. Control Flow: While Loop ---
-print(555555);
-counter = 5;
-factorial = 1;
-while (counter > 0) {
-    factorial = factorial * counter;
-    counter = counter - 1;
-}
-print(factorial); // 5! = 120
-
-// --- 6. Scoping & Shadowing ---
-print(666666);
-global = 100;
+// Main execution block (Chart 9: Parse Tree)
 {
-    // New scope
-    global = 200; // Variable Shadowing or Re-assignment? 
-                  // In this language, it looks up scope stack, so it modifies 'global'.
-                  // Let's declare a NEW variable to test scope isolation if possible, 
-                  // but semantic analyzer 'resolve' logic implies looking up.
+    // Constant Folding (Chart 14: Machine Independent Optimization)
+    int const_fold_demo = 5 * 2 + 10 - 20; // Should fold to 0
+
+    // Peephole Optimization: Algebraic Identity (Chart 15)
+    int identity_check = global_x + 0; // Should optimize to 'global_x'
+    int self_assign = global_x;
+    self_assign = self_assign; // Should be removed (x = x)
+
+    // Function Call (Chart 13: TAC generation for CALL)
+    int result = add_numbers(global_x, 5);
     
-    local = 77;
-    print(local);
+    check_parity(result);
+
+    // Dead Code Elimination (Chart 14)
+    if (0) {
+        // This block is unreachable and should be removed by optimization
+        int dead_var = 999;
+        print(dead_var);
+    }
+
+    // While Loop with Scope (Chart 10: Block Scope)
+    int i = 0;
+    while (i < 3) {
+        i = i + 1;
+        print(i);
+    }
 }
-// print(local); // This would cause an error if uncommented (Variable not declared)
-print(global);   // Should be 200 if modified, or 100 if purely strictly local defs. 
-                 // (Based on code: 'define' writes to current scope. 'resolve' looks up.
-                 // So 'global = 200' inside block defines a NEW variable 'global' in that scope if it uses 'define' blindy,
-                 // or assigns if it checks existence. 
-                 // Let's check semantic_analyzer.py: visitAssignment calls define(). 
-                 // SymbolTable.define() puts it in _current_ scope. 
-                 // So "global = 200" shadows the outer "global". Outer should remain 100.)

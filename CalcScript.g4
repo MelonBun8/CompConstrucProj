@@ -4,16 +4,28 @@ grammar CalcScript;
  * Parser Rules
  */
 
-prog: stat+ ;
+prog: (funcDecl | stat)+ ;
 
-stat: assignment SEMI?      # AssignStat
+funcDecl: 'func' ID LPAREN paramList? RPAREN (COLON type)? block ;
+
+paramList: param (',' param)* ;
+param: ID ':' type ;
+
+stat: varDecl SEMI?           # VarDeclStat
+    | assignment SEMI?      # AssignStat
     | printStmt SEMI?       # PrintStat
     | ifStmt                # IfStat
     | whileStmt             # WhileStat
+    | returnStmt SEMI?      # ReturnStat
+    | expr SEMI?            # ExprStat  // Allow function calls as statements
     | block                 # BlockStat
     ;
 
+varDecl: type ID ASSIGN expr ;
+
 assignment: ID ASSIGN expr ;
+
+returnStmt: RETURN expr? ;
 
 printStmt: PRINT LPAREN expr RPAREN ;
 
@@ -28,17 +40,24 @@ expr: expr POWER expr                   # PowerExpr
     | expr (ADD|SUB) expr               # AddSubExpr
     | expr (GT|LT|GTE|LTE) expr         # RelationalExpr
     | expr (EQ|NEQ) expr                # EqualityExpr
+    | ID LPAREN argList? RPAREN         # FunCallExpr
     | ID                                # IdExpr
     | INT                               # IntExpr
     | FLOAT                             # FloatExpr
     | LPAREN expr RPAREN                # ParenExpr
     ;
 
+argList: expr (',' expr)* ;
+
+type: 'int' | 'float' | 'void' ;
+
 /*
  * Lexer Rules
  */
 
 SEMI: ';' ;
+COLON: ':' ;
+COMMA: ',' ;
 ASSIGN: '=' ;
 LPAREN: '(' ;
 RPAREN: ')' ;
@@ -62,6 +81,11 @@ IF: 'if' ;
 ELSE: 'else' ;
 WHILE: 'while' ;
 PRINT: 'print' ;
+RETURN: 'return' ;
+FUNC: 'func' ;
+TYPE_INT: 'int' ;
+TYPE_FLOAT: 'float' ;
+TYPE_VOID: 'void' ;
 
 ID: [a-zA-Z_] [a-zA-Z_0-9]* ;
 INT: [0-9]+ ;
